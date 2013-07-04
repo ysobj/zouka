@@ -16,6 +16,11 @@ public class MorphologicalFilterTest {
 	}
 
 	@Test
+	public void 存在しないひらがなの羅列() {
+		assertThat(t.filter("もはむあらかざいしすねも"), is("モハむあらかざいしすねも"));
+	}
+
+	@Test
 	public void 例外系空文字列等() {
 		t.filter(null);
 	}

@@ -5,10 +5,10 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-import com.karatebancho.zouka.impl.HiraKateFilter;
+import com.karatebancho.zouka.impl.HiraKataFilter;
 
 public class HiraKateFilterTest {
-	protected HiraKateFilter filter = new HiraKateFilter();
+	protected HiraKataFilter filter = new HiraKataFilter();
 
 	@Test
 	public void 基本的な処理() {

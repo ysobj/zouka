@@ -1,5 +1,7 @@
 package com.karatebancho.zouka.impl;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.karatebancho.zouka.Filter;
 
 public class RomanFilter implements Filter {
@@ -97,9 +99,10 @@ public class RomanFilter implements Filter {
 
 	@Override
 	public String filter(String original) {
-		StringBuilder sb = new StringBuilder(original.length() * 2);
-		for (int i = 0; i < original.length(); i++) {
-			char c = original.charAt(i);
+		String normlized = normalizePartOfRomanization(original);
+		StringBuilder sb = new StringBuilder(normlized.length() * 2);
+		for (int i = 0; i < normlized.length(); i++) {
+			char c = normlized.charAt(i);
 			if (12449 <= c && c <= 12534) {
 				sb.append(romanArray[((int) c - 12449)]);
 			} else {
@@ -107,5 +110,31 @@ public class RomanFilter implements Filter {
 			}
 		}
 		return sb.toString();
+	}
+
+	protected String normalizePartOfRomanization(String part) {
+		if (StringUtils.isEmpty(part)) {
+			return part;
+		}
+		if (StringUtils.endsWithAny(part, "zy", "my", "ny", "sy", "ry", "ty",
+				"py", "dy", "gy", "hy", "jy", "ky", "vy", "by")) {
+			return part.substring(0, part.length() - 1);
+		}
+		if (StringUtils.endsWithAny(part, "ch", "cy")) {
+			return part.substring(0, part.length() - 2) + "t";
+		}
+		if (part.endsWith("j")) {
+			return part.substring(0, part.length() - 1) + "z";
+		}
+		if (part.endsWith("c")) {
+			return part.substring(0, part.length() - 1) + "t";
+		}
+		if (part.endsWith("fy")) {
+			return part.substring(0, part.length() - 2) + "h";
+		}
+		if (part.endsWith("f")) {
+			return part.substring(0, part.length() - 1) + "h";
+		}
+		return part;
 	}
 }

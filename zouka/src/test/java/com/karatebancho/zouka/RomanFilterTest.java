@@ -1,6 +1,6 @@
 package com.karatebancho.zouka;
 
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
@@ -12,11 +12,20 @@ public class RomanFilterTest {
 
 	@Test
 	public void test() {
-		assertThat(filter.filter("ア"), is("a"));
-		assertThat(filter.filter("あ"), is("あ"));
-		assertThat(filter.filter("ヴ"), is("vu"));
+		assertThat(filter.filter("ア"), equalTo("a"));
+		assertThat(filter.filter("あ"), equalTo("あ"));
+		assertThat(filter.filter("ヴ"), equalTo("vu"));
+		assertThat(filter.filter("チャ"), equalTo("tixya"));
 
-		assertThat(filter.filter(""), is(""));
-		assertThat(filter.filter("トウキョウハヨルノシチジ"), is("toukixyouhayorunositizi"));
+		assertThat(filter.filter(""), equalTo(""));
+		assertThat(filter.filter("トウキョウハヨルノシチジ"),
+				equalTo("toukixyouhayorunositizi"));
+		assertThat(filter.filter("トウキョウハヨルノシチj"),
+				equalTo("toukixyouhayorunositiz"));
+		assertThat(filter.filter("オc"), equalTo("ot"));
+		assertThat(filter.filter("オch"), equalTo("ot"));
+		assertThat(filter.filter("オcy"), equalTo("ot"));
+		assertThat(filter.filter("キzy"), equalTo("kiz"));
+		assertThat(filter.filter("シf"), equalTo("sih"));
 	}
 }

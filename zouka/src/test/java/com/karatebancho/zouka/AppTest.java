@@ -28,6 +28,7 @@ public class AppTest {
 	public void testApp() {
 		assertThat(filter("笑止高齢化"), is(filter("少子高齢化")));
 		assertThat(filter("しゃ皆保険"), is(filter("社会保険")));
+		assertThat(filter("電車間に合いそう"), is(filter("電車マニア移送")));
 		// assertThat(filter("滑稽銀"), is(filter("国会議員")));
 		// Expected: is "koxtukaigiinn"
 		// but: was "koxtukeiginn"

@@ -1,15 +1,16 @@
 package com.karatebancho.zouka.tree;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
 public class TrieTree<V> implements Map<String, V> {
-	protected int count;
+	protected LinkedList<Map.Entry<String, V>> list = new LinkedList<>();
 
 	@Override
 	public int size() {
-		return count;
+		return list.size();
 	}
 
 	@Override
@@ -38,7 +39,6 @@ public class TrieTree<V> implements Map<String, V> {
 
 	@Override
 	public V put(String key, V value) {
-		count++;
 		// TODO Auto-generated method stub
 		return null;
 	}

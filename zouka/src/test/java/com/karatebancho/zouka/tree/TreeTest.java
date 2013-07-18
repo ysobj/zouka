@@ -19,4 +19,10 @@ public class TreeTest {
 		assertThat(actual, is("東京"));
 	}
 
+	@Test
+	public void getCommonPrefix() {
+		TrieTree<String> root = new TrieTree<>();
+		assertThat(root.getCommonPrefix("abc", "def"), is(""));
+		assertThat(root.getCommonPrefix("abc", "abd"), is("ab"));
+	}
 }

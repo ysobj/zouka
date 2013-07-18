@@ -5,8 +5,19 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class TrieTree<V> implements Map<String, V> {
 	protected LinkedList<Map.Entry<String, V>> list = new LinkedList<>();
+	protected String prefix;
+
+	public TrieTree() {
+		this("");
+	}
+
+	public TrieTree(String prefix) {
+		this.prefix = prefix;
+	}
 
 	@Override
 	public int size() {
@@ -79,4 +90,7 @@ public class TrieTree<V> implements Map<String, V> {
 		return null;
 	}
 
+	public String getCommonPrefix(String a, String b) {
+		return StringUtils.getCommonPrefix(a, b);
+	}
 }

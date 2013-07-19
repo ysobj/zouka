@@ -1,15 +1,19 @@
 package com.karatebancho.zouka.tree;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
 public class TrieTree<V> implements Map<String, V> {
-	protected LinkedList<Map.Entry<String, V>> list = new LinkedList<>();
+	protected List<V> list = new ArrayList<>();
+	protected LinkedList<TrieTree<V>> children = new LinkedList<>();
 	protected String prefix;
+	protected int count;
 
 	public TrieTree() {
 		this("");
@@ -21,7 +25,7 @@ public class TrieTree<V> implements Map<String, V> {
 
 	@Override
 	public int size() {
-		return list.size();
+		return count;
 	}
 
 	@Override
@@ -44,13 +48,32 @@ public class TrieTree<V> implements Map<String, V> {
 
 	@Override
 	public V get(Object key) {
-		// TODO Auto-generated method stub
+		if (key == null) {
+			return null;
+		}
+		String strKey = key.toString();
+		if (StringUtils.equals(strKey, prefix)) {
+			return this.list.get(0);
+		}
+		for (TrieTree<V> target : this.children) {
+			if (StringUtils.equals(strKey, target.getPrefix())) {
+				return target.get(strKey);
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public V put(String key, V value) {
-		// TODO Auto-generated method stub
+		if (StringUtils.equals(key, prefix)) {
+			list.add(value);
+			return null;
+		}
+		// if(prefix.length() > 0 && StringUtils.startsWith(str, key))
+		TrieTree<V> tree = new TrieTree<>(key);
+		tree.put(key, value);
+		children.add(tree);
+		count++;
 		return null;
 	}
 
@@ -93,4 +116,9 @@ public class TrieTree<V> implements Map<String, V> {
 	public String getCommonPrefix(String a, String b) {
 		return StringUtils.getCommonPrefix(a, b);
 	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
 }

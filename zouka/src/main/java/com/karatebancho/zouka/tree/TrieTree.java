@@ -65,15 +65,31 @@ public class TrieTree<V> implements Map<String, V> {
 
 	@Override
 	public V put(String key, V value) {
+		count++;
+		// 自分のノードにつける
 		if (StringUtils.equals(key, prefix)) {
 			list.add(value);
 			return null;
 		}
-		// if(prefix.length() > 0 && StringUtils.startsWith(str, key))
+		int commonPrefixSize = getCommonPrefix(key, prefix).length();
+		String subKey = key.substring(commonPrefixSize);
+		// 子供で部分一致するものがあるか
+		for (TrieTree<V> child : children) {
+			// 一致したらそのノード
+			if (child.getPrefix().equals(subKey)) {
+				child.put(subKey, value);
+				return null;
+			}
+			// 前方が一致したらノードの分割
+			if (getCommonPrefix(subKey, child.getPrefix()).length() > 0) {
+				// TODO
+				return null;
+			}
+		}
+		// 新規ノードを作ってその下に。
 		TrieTree<V> tree = new TrieTree<>(key);
 		tree.put(key, value);
 		children.add(tree);
-		count++;
 		return null;
 	}
 

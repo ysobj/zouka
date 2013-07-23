@@ -17,6 +17,11 @@ public class TreeTest {
 		// 文字列を取得できる
 		String actual = root.get("toukyou");
 		assertThat(actual, is("東京"));
+		// さらに文字を追加できる
+		root.put("saitama", "埼玉");
+		// 文字列の数を確認できる
+		assertThat(root.size(), is(2));
+		assertThat(root.get("saitama"), is("埼玉"));
 	}
 
 	@Test

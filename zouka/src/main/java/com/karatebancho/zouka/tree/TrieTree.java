@@ -74,15 +74,29 @@ public class TrieTree<V> implements Map<String, V> {
 		int commonPrefixSize = getCommonPrefix(key, prefix).length();
 		String subKey = key.substring(commonPrefixSize);
 		// 子供で部分一致するものがあるか
-		for (TrieTree<V> child : children) {
+		for (int i = 0; i < children.size(); i++) {
+			TrieTree<V> child = children.get(i);
 			// 一致したらそのノード
 			if (child.getPrefix().equals(subKey)) {
 				child.put(subKey, value);
 				return null;
 			}
 			// 前方が一致したらノードの分割
-			if (getCommonPrefix(subKey, child.getPrefix()).length() > 0) {
-				// TODO
+			String commonPrefix = getCommonPrefix(subKey, child.getPrefix());
+			if (commonPrefix.length() > 0) {
+				// 新しい親ノード
+				TrieTree<V> newNode = new TrieTree<>(commonPrefix);
+				children.set(i, newNode);
+				// 元々あったノード
+				child.setPrefix(child.getPrefix().substring(
+						commonPrefix.length()));
+				newNode.putChild(child);
+				// 新規ノード
+				TrieTree<V> newChild = new TrieTree<>(
+						subKey.substring(commonPrefix.length()));
+				newChild.putData(value);
+				newNode.putChild(newChild);
+
 				return null;
 			}
 		}
@@ -91,6 +105,10 @@ public class TrieTree<V> implements Map<String, V> {
 		tree.put(key, value);
 		children.add(tree);
 		return null;
+	}
+
+	public void setPrefix(String val) {
+		this.prefix = val;
 	}
 
 	@Override
@@ -137,4 +155,11 @@ public class TrieTree<V> implements Map<String, V> {
 		return prefix;
 	}
 
+	public void putChild(TrieTree<V> tree) {
+		this.children.add(tree);
+	}
+
+	public void putData(V value) {
+		this.list.add(value);
+	}
 }

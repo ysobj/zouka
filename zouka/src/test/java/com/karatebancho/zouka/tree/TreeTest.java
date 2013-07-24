@@ -22,6 +22,10 @@ public class TreeTest {
 		// 文字列の数を確認できる
 		assertThat(root.size(), is(2));
 		assertThat(root.get("saitama"), is("埼玉"));
+		//
+		root.put("toukou", "投稿");
+		assertThat(root.size(), is(3));
+		assertThat(root.get("toukou"), is("投稿"));
 	}
 
 	@Test

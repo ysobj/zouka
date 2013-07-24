@@ -1,15 +1,12 @@
 package com.karatebancho.zouka.tree;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class TrieTree<V> implements Map<String, V> {
+public class TrieTree<V> {
 	protected List<V> list = new ArrayList<>();
 	protected LinkedList<TrieTree<V>> children = new LinkedList<>();
 	protected String prefix;
@@ -23,30 +20,10 @@ public class TrieTree<V> implements Map<String, V> {
 		this.prefix = prefix;
 	}
 
-	@Override
 	public int size() {
 		return count;
 	}
 
-	@Override
-	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean containsKey(Object key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean containsValue(Object value) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public V get(Object key) {
 		if (key == null) {
 			return null;
@@ -59,11 +36,14 @@ public class TrieTree<V> implements Map<String, V> {
 			if (StringUtils.equals(strKey, target.getPrefix())) {
 				return target.get(strKey);
 			}
+			String commonPrefix = getCommonPrefix(strKey, target.getPrefix());
+			if (commonPrefix.length() > 0) {
+				return target.get(strKey.substring(commonPrefix.length()));
+			}
 		}
 		return null;
 	}
 
-	@Override
 	public V put(String key, V value) {
 		count++;
 		// 自分のノードにつける
@@ -109,42 +89,6 @@ public class TrieTree<V> implements Map<String, V> {
 
 	public void setPrefix(String val) {
 		this.prefix = val;
-	}
-
-	@Override
-	public V remove(Object key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void putAll(Map<? extends String, ? extends V> m) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Set<String> keySet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<V> values() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Set<java.util.Map.Entry<String, V>> entrySet() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public String getCommonPrefix(String a, String b) {

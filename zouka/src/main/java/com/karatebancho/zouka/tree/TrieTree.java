@@ -24,13 +24,13 @@ public class TrieTree<V> {
 		return count;
 	}
 
-	public V get(Object key) {
+	public List<V> get(Object key) {
 		if (key == null) {
 			return null;
 		}
 		String strKey = key.toString();
 		if (StringUtils.equals(strKey, prefix)) {
-			return this.list.get(0);
+			return this.list;
 		}
 		for (TrieTree<V> target : this.children) {
 			if (StringUtils.equals(strKey, target.getPrefix())) {

@@ -45,8 +45,15 @@ public class TreeTest {
 	}
 
 	@Test
-	public void 削除() {
-		org.junit.Assert.fail();
+	public void キーの分割がない場合の削除() {
+		TrieTree<String> root = new TrieTree<>();
+		root.put("toushi", "投資");
+		root.put("naha", "那覇");
+		assertThat(root.size(), is(2));
+		root.remove("toushi", "投資");
+		assertThat(root.size(), is(1));
+		List<String> actual = root.get("toushi");
+		assertThat(actual.size(), is(0));
 	}
 
 	@Test

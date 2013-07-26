@@ -106,4 +106,33 @@ public class TrieTree<V> {
 	public void putData(V value) {
 		this.list.add(value);
 	}
+
+	public boolean remove(String key, V value) {
+		this.count--;
+		if (key == null) {
+			return false;
+		}
+		String strKey = key.toString();
+		if (StringUtils.equals(strKey, prefix)) {
+			for (int i = 0; i < this.list.size(); i++) {
+				V tmp = list.get(i);
+				if (tmp.equals(value)) {
+					this.list.remove(i);
+					return true;
+				}
+			}
+		}
+		int commonPrefixSize = getCommonPrefix(key, prefix).length();
+		String subKey = key.substring(commonPrefixSize);
+		// 子供で部分一致するものがあるか
+		for (int i = 0; i < children.size(); i++) {
+			TrieTree<V> child = children.get(i);
+			// 一致したらそのノード
+			if (child.getPrefix().equals(subKey)) {
+				return child.remove(subKey, value);
+			}
+
+		}
+		return false;
+	}
 }

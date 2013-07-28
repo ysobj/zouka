@@ -56,8 +56,9 @@ public class TrieTree<V> {
 		// 子供で部分一致するものがあるか
 		for (int i = 0; i < children.size(); i++) {
 			TrieTree<V> child = children.get(i);
-			// 一致したらそのノード
-			if (child.getPrefix().equals(subKey)) {
+			// 一致した/それで始まっているならそのノード
+			if (child.getPrefix().equals(subKey)
+					|| subKey.startsWith(child.getPrefix())) {
 				child.put(subKey, value);
 				return null;
 			}
@@ -135,4 +136,10 @@ public class TrieTree<V> {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "TrieTree [list=" + list + ", prefix=" + prefix + "]";
+	}
+
 }

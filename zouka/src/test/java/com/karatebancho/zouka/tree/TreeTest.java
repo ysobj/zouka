@@ -57,6 +57,22 @@ public class TreeTest {
 	}
 
 	@Test
+	public void キーの分割が発生する場合の削除() {
+		TrieTree<String> root = new TrieTree<>();
+		root.put("toukyou", "東京");
+		root.put("saitama", "埼玉");
+		root.put("toukou", "投稿");
+		root.put("toukou", "登校");
+		assertThat(root.size(), is(4));
+		assertThat(root.get("toukou").size(), is(2));
+		assertThat(root.get("toukou").get(0), is("投稿"));
+		root.remove("toukou", "投稿");
+		root.remove("toukou", "登校");
+		assertThat(root.size(), is(2));
+		assertThat(root.get("toukou").size(), is(0));
+	}
+
+	@Test
 	public void getCommonPrefix() {
 		TrieTree<String> root = new TrieTree<>();
 		assertThat(root.getCommonPrefix("abc", "def"), is(""));

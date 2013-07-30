@@ -28,17 +28,28 @@ public class TrieTree<V> {
 		if (key == null) {
 			return null;
 		}
+		TrieTree<V> node = getNode(key);
+		if (node != null) {
+			return node.list;
+		}
+		return null;
+	}
+
+	protected TrieTree<V> getNode(Object key) {
+		if (key == null) {
+			return null;
+		}
 		String strKey = key.toString();
 		if (StringUtils.equals(strKey, prefix)) {
-			return this.list;
+			return this;
 		}
 		for (TrieTree<V> target : this.children) {
 			if (StringUtils.equals(strKey, target.getPrefix())) {
-				return target.get(strKey);
+				return target;
 			}
 			String commonPrefix = getCommonPrefix(strKey, target.getPrefix());
 			if (commonPrefix.length() > 0) {
-				return target.get(strKey.substring(commonPrefix.length()));
+				return target.getNode(strKey.substring(commonPrefix.length()));
 			}
 		}
 		return null;

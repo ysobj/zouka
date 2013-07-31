@@ -43,13 +43,17 @@ public class TrieTree<V> {
 		if (StringUtils.equals(strKey, prefix)) {
 			return this;
 		}
+		String subKey = StringUtils.getCommonPrefix(strKey, prefix);
+		if (StringUtils.isEmpty(subKey)) {
+			return null;
+		}
 		for (TrieTree<V> target : this.children) {
-			if (StringUtils.equals(strKey, target.getPrefix())) {
+			if (StringUtils.equals(subKey, target.getPrefix())) {
 				return target;
 			}
-			String commonPrefix = getCommonPrefix(strKey, target.getPrefix());
+			String commonPrefix = getCommonPrefix(subKey, target.getPrefix());
 			if (commonPrefix.length() > 0) {
-				return target.getNode(strKey.substring(commonPrefix.length()));
+				return target.getNode(subKey.substring(commonPrefix.length()));
 			}
 		}
 		return null;
@@ -119,6 +123,17 @@ public class TrieTree<V> {
 		this.list.add(value);
 	}
 
+	protected boolean removeData(V value) {
+		for (int i = 0; i < this.list.size(); i++) {
+			V tmp = list.get(i);
+			if (tmp.equals(value)) {
+				this.list.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean remove(String key, V value) {
 		this.count--;
 		if (key == null) {
@@ -126,12 +141,8 @@ public class TrieTree<V> {
 		}
 		String strKey = key.toString();
 		if (StringUtils.equals(strKey, prefix)) {
-			for (int i = 0; i < this.list.size(); i++) {
-				V tmp = list.get(i);
-				if (tmp.equals(value)) {
-					this.list.remove(i);
-					return true;
-				}
+			if (removeData(value)) {
+				return true;
 			}
 		}
 		int commonPrefixSize = getCommonPrefix(key, prefix).length();
@@ -140,10 +151,12 @@ public class TrieTree<V> {
 		for (int i = 0; i < children.size(); i++) {
 			TrieTree<V> child = children.get(i);
 			// 一致したらそのノード
-			if (child.getPrefix().equals(subKey)) {
-				return child.remove(subKey, value);
+			TrieTree<V> node = child.getNode(subKey);
+			if (node != null) {
+				if (node.removeData(value)) {
+					return true;
+				}
 			}
-
 		}
 		return false;
 	}

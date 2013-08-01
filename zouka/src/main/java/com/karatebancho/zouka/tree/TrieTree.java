@@ -35,6 +35,20 @@ public class TrieTree<V> {
 		return null;
 	}
 
+	public boolean isResponsible(String key) {
+		if (StringUtils.isEmpty(key)) {
+			return true;
+		}
+		int commonPrefixSize = getCommonPrefix(key, prefix).length();
+		return commonPrefixSize > 0;
+	}
+
+	protected String getSubKey(String key) {
+		int commonPrefixSize = getCommonPrefix(key, prefix).length();
+		String subKey = key.substring(commonPrefixSize);
+		return subKey;
+	}
+
 	protected TrieTree<V> getNode(Object key) {
 		if (key == null) {
 			return null;
@@ -50,9 +64,6 @@ public class TrieTree<V> {
 			return null;
 		}
 		for (TrieTree<V> target : this.children) {
-			if (StringUtils.equals(subKey, target.getPrefix())) {
-				return target;
-			}
 			String commonPrefix = getCommonPrefix(subKey, target.getPrefix());
 			if (commonPrefix.length() > 0) {
 				return target.getNode(subKey);

@@ -43,8 +43,9 @@ public class TrieTree<V> {
 		if (StringUtils.equals(strKey, prefix)) {
 			return this;
 		}
-		String subKey = StringUtils.isEmpty(prefix) ? strKey : StringUtils
-				.getCommonPrefix(strKey, prefix);
+		String subKey = StringUtils.isEmpty(prefix) ? strKey
+				: strKey.substring(StringUtils.getCommonPrefix(strKey, prefix)
+						.length());
 		if (StringUtils.isEmpty(subKey)) {
 			return null;
 		}

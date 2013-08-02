@@ -43,7 +43,8 @@ public class TrieTree<V> {
 
 	/**
 	 * 
-	 * 自分がこのキーを処理する責任があるか。 キーが自分のprefixと一致するか、共通のprefixを持つ場合、責任があると判断する。
+	 * 自分(もしくはその子)がこのキーを処理する責任があるか。
+	 * キーが自分のprefixと一致するか、共通のprefixを持つ場合、責任があると判断する。
 	 * 
 	 * @param key
 	 * @return 自分が処理する場合true
@@ -65,6 +66,15 @@ public class TrieTree<V> {
 		return commonPrefixSize > 0;
 	}
 
+	/**
+	 * 
+	 * 渡された文字列の先頭から、自分のprefixを除いた残りを返します。
+	 * 
+	 * prefix: hoge, key: hogefuga = fuga
+	 * 
+	 * @param key
+	 * @return
+	 */
 	protected String getSubKey(String key) {
 		int commonPrefixSize = getCommonPrefix(key, prefix).length();
 		String subKey = key.substring(commonPrefixSize);
@@ -91,9 +101,35 @@ public class TrieTree<V> {
 		return null;
 	}
 
+	/**
+	 * 
+	 * ノード分割を行うべきキーか判定します。
+	 * 自分のprefixと共通部分があるが、自分のprefixで前方一致しない文字列の場合、分割を行うと判断します。
+	 * 
+	 * prefix: hogefuga, key:hogehoge = true <br>
+	 * prefix: hoge, key: hogehoge = false
+	 * 
+	 * @param key
+	 * @return
+	 */
 	protected boolean isNeedSplitNode(String key) {
 		return (getCommonPrefix(this.prefix, key).length() > 0 && !key
 				.startsWith(this.prefix));
+	}
+
+	/**
+	 * 
+	 * キー/ノードの分割を行います。 具体的には、キーを分割して、新しい子供に自分のデータを引き継ぎます。
+	 * 
+	 * @param prefix
+	 */
+	protected void splitNode(String prefix) {
+		String subKey = getSubKey(prefix);
+		TrieTree<V> newNode = new TrieTree<>(subKey, this.list, this.children);
+		this.prefix = prefix;
+		this.list = new ArrayList<>();
+		this.children = new ArrayList<>();
+		this.children.add(newNode);
 	}
 
 	protected void putData(V value) {
@@ -109,15 +145,6 @@ public class TrieTree<V> {
 			}
 		}
 		return false;
-	}
-
-	protected void splitNode(String prefix) {
-		String subKey = getSubKey(prefix);
-		TrieTree<V> newNode = new TrieTree<>(subKey, this.list, this.children);
-		this.prefix = prefix;
-		this.list = new ArrayList<>();
-		this.children = new ArrayList<>();
-		this.children.add(newNode);
 	}
 
 	public V put(String key, V value) {
@@ -150,20 +177,8 @@ public class TrieTree<V> {
 		return null;
 	}
 
-	public void setPrefix(String val) {
-		this.prefix = val;
-	}
-
 	public String getCommonPrefix(String a, String b) {
 		return StringUtils.getCommonPrefix(a, b);
-	}
-
-	public String getPrefix() {
-		return prefix;
-	}
-
-	protected void putChild(TrieTree<V> tree) {
-		this.children.add(tree);
 	}
 
 	public boolean remove(String key, V value) {

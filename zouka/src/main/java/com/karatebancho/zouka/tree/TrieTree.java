@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class TrieTree<V> {
 	protected List<V> list = new ArrayList<>();
-	protected LinkedList<TrieTree<V>> children = new LinkedList<>();
+	protected List<TrieTree<V>> children = new LinkedList<>();
 	protected String prefix;
 	protected int count;
 
@@ -16,7 +16,13 @@ public class TrieTree<V> {
 		this("");
 	}
 
-	public TrieTree(String prefix) {
+	protected TrieTree(String prefix, List<V> data, List<TrieTree<V>> children) {
+		this.prefix = prefix;
+		this.list = data;
+		this.children = children;
+	}
+
+	protected TrieTree(String prefix) {
 		this.prefix = prefix;
 	}
 
@@ -35,8 +41,24 @@ public class TrieTree<V> {
 		return null;
 	}
 
+	/**
+	 * 
+	 * 自分がこのキーを処理する責任があるか。 キーが自分のprefixと一致するか、共通のprefixを持つ場合、責任があると判断する。
+	 * 
+	 * @param key
+	 * @return 自分が処理する場合true
+	 */
 	public boolean isResponsible(String key) {
 		if (StringUtils.isEmpty(key)) {
+			return false;
+		}
+		if (StringUtils.isEmpty(prefix)) {
+			return true;
+		}
+		if (key.charAt(0) != prefix.charAt(0)) {
+			return false;
+		}
+		if (StringUtils.equals(prefix, key)) {
 			return true;
 		}
 		int commonPrefixSize = getCommonPrefix(key, prefix).length();
@@ -57,19 +79,21 @@ public class TrieTree<V> {
 		if (StringUtils.equals(strKey, prefix)) {
 			return this;
 		}
-		String subKey = StringUtils.isEmpty(prefix) ? strKey
-				: strKey.substring(StringUtils.getCommonPrefix(strKey, prefix)
-						.length());
+		String subKey = this.getSubKey(strKey);
 		if (StringUtils.isEmpty(subKey)) {
 			return null;
 		}
 		for (TrieTree<V> target : this.children) {
-			String commonPrefix = getCommonPrefix(subKey, target.getPrefix());
-			if (commonPrefix.length() > 0) {
+			if (target.isResponsible(subKey)) {
 				return target.getNode(subKey);
 			}
 		}
 		return null;
+	}
+
+	protected boolean isNeedSplitNode(String key) {
+		return (getCommonPrefix(this.prefix, key).length() > 0 && !key
+				.startsWith(this.prefix));
 	}
 
 	protected void putData(V value) {
@@ -87,6 +111,15 @@ public class TrieTree<V> {
 		return false;
 	}
 
+	protected void splitNode(String prefix) {
+		String subKey = getSubKey(prefix);
+		TrieTree<V> newNode = new TrieTree<>(subKey, this.list, this.children);
+		this.prefix = prefix;
+		this.list = new ArrayList<>();
+		this.children = new ArrayList<>();
+		this.children.add(newNode);
+	}
+
 	public V put(String key, V value) {
 		count++;
 		// 自分のノードにつける
@@ -94,33 +127,19 @@ public class TrieTree<V> {
 			putData(value);
 			return null;
 		}
-		int commonPrefixSize = getCommonPrefix(key, prefix).length();
-		String subKey = key.substring(commonPrefixSize);
+		if (isNeedSplitNode(key)) {
+			String newPrefix = getCommonPrefix(this.prefix, key);
+			this.splitNode(newPrefix);
+			this.put(key, value);
+			return null;
+		}
+		String subKey = this.getSubKey(key);
 		// 子供で部分一致するものがあるか
 		for (int i = 0; i < children.size(); i++) {
 			TrieTree<V> child = children.get(i);
 			// 一致した/それで始まっているならそのノード
-			if (child.getPrefix().equals(subKey)
-					|| subKey.startsWith(child.getPrefix())) {
+			if (child.isResponsible(subKey)) {
 				child.put(subKey, value);
-				return null;
-			}
-			// 前方が一致したらノードの分割
-			String commonPrefix = getCommonPrefix(subKey, child.getPrefix());
-			if (commonPrefix.length() > 0) {
-				// 新しい親ノード
-				TrieTree<V> newNode = new TrieTree<>(commonPrefix);
-				children.set(i, newNode);
-				// 元々あったノード
-				child.setPrefix(child.getPrefix().substring(
-						commonPrefix.length()));
-				newNode.putChild(child);
-				// 新規ノード
-				TrieTree<V> newChild = new TrieTree<>(
-						subKey.substring(commonPrefix.length()));
-				newChild.putData(value);
-				newNode.putChild(newChild);
-
 				return null;
 			}
 		}
@@ -152,31 +171,18 @@ public class TrieTree<V> {
 		if (key == null) {
 			return false;
 		}
-		String strKey = key.toString();
-		if (StringUtils.equals(strKey, prefix)) {
-			if (removeData(value)) {
-				return true;
-			}
-		}
-		int commonPrefixSize = getCommonPrefix(key, prefix).length();
-		String subKey = key.substring(commonPrefixSize);
-		// 子供で部分一致するものがあるか
-		for (int i = 0; i < children.size(); i++) {
-			TrieTree<V> child = children.get(i);
-			// 一致したらそのノード
-			TrieTree<V> node = child.getNode(subKey);
-			if (node != null) {
-				if (node.removeData(value)) {
-					return true;
-				}
-			}
+		TrieTree<V> node = this.getNode(key);
+		if (node != null) {
+			node.removeData(value);
+			return true;
 		}
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		return "TrieTree [list=" + list + ", prefix=" + prefix + "]";
+		return "TrieTree{prefix=" + prefix + ", list=" + list + ", children="
+				+ children + "}";
 	}
 
 }

@@ -73,6 +73,18 @@ public class TreeTest {
 	}
 
 	@Test
+	public void findAllValues() {
+		TrieTree<String> root = new TrieTree<>();
+		root.put("toukyou", "東京");
+		root.put("saitama", "埼玉");
+		root.put("toukou", "投稿");
+		root.put("toukou", "登校");
+		List<String> list = root.findValues("t");
+		assertThat(list.size(), is(3));
+
+	}
+
+	@Test
 	public void getCommonPrefix() {
 		TrieTree<String> root = new TrieTree<>();
 		assertThat(root.getCommonPrefix("abc", "def"), is(""));

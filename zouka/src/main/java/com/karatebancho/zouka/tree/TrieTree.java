@@ -147,18 +147,11 @@ public class TrieTree<V> {
 		return false;
 	}
 
-	public V put(String key, V value) {
+	public boolean put(String key, V value) {
 		count++;
 		// 自分のノードにつける
-		if (StringUtils.equals(key, prefix)) {
-			putData(value);
-			return null;
-		}
-		if (isNeedSplitNode(key)) {
-			String newPrefix = getCommonPrefix(this.prefix, key);
-			this.splitNode(newPrefix);
-			this.put(key, value);
-			return null;
+		if (putOnMyOwn(key, value)) {
+			return true;
 		}
 		String subKey = this.getSubKey(key);
 		// 子供で部分一致するものがあるか
@@ -167,14 +160,28 @@ public class TrieTree<V> {
 			// 一致した/それで始まっているならそのノード
 			if (child.isResponsible(subKey)) {
 				child.put(subKey, value);
-				return null;
+				return true;
 			}
 		}
 		// 新規ノードを作ってその下に。
 		TrieTree<V> tree = new TrieTree<>(key);
 		tree.put(key, value);
 		children.add(tree);
-		return null;
+		return true;
+	}
+
+	protected boolean putOnMyOwn(String key, V value) {
+		if (StringUtils.equals(key, prefix)) {
+			putData(value);
+			return true;
+		}
+		if (isNeedSplitNode(key)) {
+			String newPrefix = getCommonPrefix(this.prefix, key);
+			this.splitNode(newPrefix);
+			this.put(key, value);
+			return true;
+		}
+		return false;
 	}
 
 	public String getCommonPrefix(String a, String b) {
@@ -192,6 +199,26 @@ public class TrieTree<V> {
 			return true;
 		}
 		return false;
+	}
+
+	public List<V> findValues(String key) {
+		List<V> list = new ArrayList<>();
+		findValues(key, list);
+		return list;
+	}
+
+	protected void findValues(String key, List<V> list) {
+		if (StringUtils.isNotEmpty(key) && StringUtils.isNotEmpty(this.prefix)
+				&& getCommonPrefix(this.prefix, key).length() == 0) {
+			return;
+		}
+		list.addAll(this.list);
+		for (TrieTree<V> child : this.children) {
+			if (StringUtils.isEmpty(key) || StringUtils.isEmpty(child.prefix)
+					|| key.charAt(0) == child.prefix.charAt(0)) {
+				child.findValues(null, list);
+			}
+		}
 	}
 
 	@Override

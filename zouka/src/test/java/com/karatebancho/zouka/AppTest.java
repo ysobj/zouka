@@ -6,7 +6,6 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import com.karatebancho.zouka.impl.HiraKataFilter;
@@ -32,8 +31,8 @@ public class AppTest {
 		// assertThat(filter("滑稽銀"), is(filter("国会議員")));
 		// Expected: is "koxtukaigiinn"
 		// but: was "koxtukeiginn"
-		System.out.println(StringUtils.getLevenshteinDistance("koxtukaigiinn",
-				"koxtukeiginn"));
+		// System.out.println(StringUtils.getLevenshteinDistance("koxtukaigiinn",
+		// "koxtukeiginn"));
 	}
 
 	protected String filter(String original) {

@@ -105,6 +105,8 @@ public class RomanFilter implements Filter {
 			char c = normlized.charAt(i);
 			if (12449 <= c && c <= 12534) {
 				sb.append(romanArray[((int) c - 12449)]);
+			} else if (c == 12540) {
+				// 長音をスキップ
 			} else {
 				sb.append(c);
 			}

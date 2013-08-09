@@ -27,5 +27,6 @@ public class RomanFilterTest {
 		assertThat(filter.filter("オcy"), equalTo("ot"));
 		assertThat(filter.filter("キzy"), equalTo("kiz"));
 		assertThat(filter.filter("シf"), equalTo("sih"));
+		assertThat(filter.filter("アーク"), equalTo("aku"));
 	}
 }

@@ -85,7 +85,28 @@ public class TreeTest {
 		root.put("toukou", "登校");
 		List<String> list = root.findValues("t");
 		assertThat(list.size(), is(3));
+	}
 
+	@Test
+	public void findAllValues2() {
+		TrieTree<String> root = new TrieTree<>();
+		root.put("toukyou", "東京");
+		root.put("saitama", "埼玉");
+		root.put("toukou", "投稿");
+		root.put("toukou", "登校");
+		List<String> list = root.findValues("touko");
+		assertThat(list.size(), is(2));
+	}
+
+	@Test
+	public void findAllValues3() {
+		TrieTree<String> root = new TrieTree<>();
+		root.put("toukyou", "東京");
+		root.put("saitama", "埼玉");
+		root.put("toukou", "投稿");
+		root.put("toukou", "登校");
+		List<String> list = root.findValues("toukon");
+		assertThat(list.size(), is(0));
 	}
 
 	@Test

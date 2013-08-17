@@ -209,15 +209,21 @@ public class TrieTree<V> {
 	}
 
 	protected void findValues(String key, List<V> list) {
-		if (StringUtils.isNotEmpty(key) && StringUtils.isNotEmpty(this.prefix)
-				&& getCommonPrefix(this.prefix, key).length() == 0) {
-			return;
+		if (StringUtils.isEmpty(key)) {
+			list.addAll(this.list);
 		}
-		list.addAll(this.list);
 		for (TrieTree<V> child : this.children) {
-			if (StringUtils.isEmpty(key) || StringUtils.isEmpty(child.prefix)
-					|| key.charAt(0) == child.prefix.charAt(0)) {
-				child.findValues(null, list);
+			if (StringUtils.isEmpty(key)) {
+				child.findValues(key, list);
+			}
+			if (child.isResponsible(key)) {
+				int commonPrefixLength = getCommonPrefix(key, child.prefix)
+						.length();
+				if (key.length() == commonPrefixLength) {
+					child.findValues("", list);
+				} else if (key.startsWith(child.prefix)) {
+					child.findValues(key.substring(child.prefix.length()), list);
+				}
 			}
 		}
 	}

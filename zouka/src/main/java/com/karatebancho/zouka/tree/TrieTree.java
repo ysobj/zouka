@@ -123,10 +123,11 @@ public class TrieTree<V> {
 	 * 
 	 * @param prefix
 	 */
-	protected void splitNode(String prefix) {
-		String subKey = getSubKey(prefix);
+	protected void splitNode(String key) {
+		int commonPrefixSize = getCommonPrefix(key, prefix).length();
+		String subKey = prefix.substring(commonPrefixSize);
 		TrieTree<V> newNode = new TrieTree<>(subKey, this.list, this.children);
-		this.prefix = prefix;
+		this.prefix = key;
 		this.list = new ArrayList<>();
 		this.children = new ArrayList<>();
 		this.children.add(newNode);
@@ -164,8 +165,8 @@ public class TrieTree<V> {
 			}
 		}
 		// 新規ノードを作ってその下に。
-		TrieTree<V> tree = new TrieTree<>(key);
-		tree.put(key, value);
+		TrieTree<V> tree = new TrieTree<>(subKey);
+		tree.put(subKey, value);
 		children.add(tree);
 		return true;
 	}

@@ -28,6 +28,10 @@ public class TreeTest {
 		root.put("toukou", "投稿");
 		assertThat(root.size(), is(3));
 		assertThat(root.get("toukou").get(0), is("投稿"));
+		//
+		root.put("tenki", "天気");
+		root.put("tenki", "転機");
+		assertThat(root.get("tenki").size(), is(2));
 	}
 
 	@Test

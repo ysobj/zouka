@@ -31,7 +31,17 @@ public class Sample {
 			i++;
 		}
 		System.out.println(i);
-		List<String> result = root.get("tenki");
-		System.out.println(result.size());
+		{
+			List<String> result = root.get("tennki");
+			for (String string : result) {
+				System.out.println(string);
+			}
+		}
+		{
+			List<String> result = root.findValues("tennki");
+			for (String string : result) {
+				System.out.println(string);
+			}
+		}
 	}
 }

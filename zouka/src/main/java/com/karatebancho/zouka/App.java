@@ -2,8 +2,9 @@ package com.karatebancho.zouka;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
+import org.apache.catalina.Wrapper;
+import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
-import org.apache.naming.resources.VirtualDirContext;
 
 import com.karatebancho.zouka.serlet.ZoukaServlet;
 
@@ -20,12 +21,13 @@ public class App {
 		ctx.addServletMapping("/zouka", "zouka");
 		ctx.setDocBase("/tmp/test");
 
-		Context staticCtx = tomcat.addContext("/web", "/web");
-		staticCtx.setDocBase("/tmp/web");
+		Wrapper defaultServlet = Tomcat.addServlet(ctx, "default",
+				new DefaultServlet());
+		defaultServlet.setLoadOnStartup(1);
+		defaultServlet.setOverridable(true);
+		ctx.addServletMapping("/", "default");
 
-		VirtualDirContext html = new VirtualDirContext();
-		html.setExtraResourcePaths("/xxx=/tmp/web");
-		// staticCtx.addR
+		tomcat.setPort(4126);
 		tomcat.start();
 		tomcat.getServer().await();
 	}

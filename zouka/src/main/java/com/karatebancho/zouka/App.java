@@ -14,12 +14,14 @@ import com.karatebancho.zouka.serlet.ZoukaServlet;
  */
 public class App {
 	public static void main(String[] args) throws LifecycleException {
+
 		Tomcat tomcat = new Tomcat();
+		tomcat.setPort(4126);
+
 		Context ctx = tomcat.addContext("/test", "/test");
-		tomcat.setBaseDir("/tmp");
 		Tomcat.addServlet(ctx, "zouka", new ZoukaServlet());
 		ctx.addServletMapping("/zouka", "zouka");
-		ctx.setDocBase("/tmp/test");
+		ctx.setDocBase("web");
 
 		Wrapper defaultServlet = Tomcat.addServlet(ctx, "default",
 				new DefaultServlet());
@@ -27,7 +29,6 @@ public class App {
 		defaultServlet.setOverridable(true);
 		ctx.addServletMapping("/", "default");
 
-		tomcat.setPort(4126);
 		tomcat.start();
 		tomcat.getServer().await();
 	}

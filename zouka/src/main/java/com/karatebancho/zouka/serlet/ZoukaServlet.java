@@ -15,6 +15,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.karatebancho.zouka.Filter;
+import com.karatebancho.zouka.impl.HiraKataFilter;
+import com.karatebancho.zouka.impl.MorphologicalFilter;
+import com.karatebancho.zouka.impl.MultiFilter;
 import com.karatebancho.zouka.impl.RomanFilter;
 import com.karatebancho.zouka.tree.TrieTree;
 
@@ -25,6 +29,7 @@ import com.karatebancho.zouka.tree.TrieTree;
 public class ZoukaServlet extends HttpServlet {
 	protected static TrieTree<String> root;
 	private static final long serialVersionUID = 1L;
+	protected static Filter keywordFilter;
 
 	@Override
 	public void init() throws ServletException {
@@ -35,18 +40,21 @@ public class ZoukaServlet extends HttpServlet {
 		String str;
 		root = new TrieTree<>();
 		try {
-			int i = 0;
 			while ((str = reader.readLine()) != null) {
 				StringTokenizer tokenizer = new StringTokenizer(str);
 				String val = tokenizer.nextToken();
 				String key = tokenizer.nextToken();
 				root.put(filter.filter(key), val);
-				i++;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		MultiFilter f = new MultiFilter();
+		f.addFilter(new MorphologicalFilter());
+		f.addFilter(new HiraKataFilter());
+		f.addFilter(new RomanFilter());
+		keywordFilter = f;
 	}
 
 	@Override
@@ -63,7 +71,11 @@ public class ZoukaServlet extends HttpServlet {
 
 	protected void doProcess(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		String key = req.getParameter("key");
+		req.setCharacterEncoding("UTF-8");
+		String originalKey = new String(req.getParameter("key").getBytes(
+				"8859_1"), "UTF-8");
+		String key = keywordFilter.filter(originalKey);
+		System.out.println(originalKey + " " + key);
 		List<String> candidates = root.findValues(key);
 		resp.addHeader("content-type", "application/json;charset=utf-8");
 		resp.getWriter().print("{");

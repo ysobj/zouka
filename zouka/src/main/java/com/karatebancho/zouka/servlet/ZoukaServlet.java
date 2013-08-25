@@ -76,9 +76,14 @@ public class ZoukaServlet extends HttpServlet {
 				"8859_1"), "UTF-8");
 		String key = keywordFilter.filter(originalKey);
 		System.out.println(originalKey + " " + key);
+		long start = System.currentTimeMillis();
 		List<String> candidates = root.findValues(key);
+		long end = System.currentTimeMillis();
 		resp.addHeader("content-type", "application/json;charset=utf-8");
 		resp.getWriter().print("{");
+		resp.getWriter().print("\"elapse\":");
+		resp.getWriter().print(end - start);
+		resp.getWriter().print(",");
 		resp.getWriter().print("\"candidate\":[");
 		int cnt = 0;
 		for (String candidate : candidates) {

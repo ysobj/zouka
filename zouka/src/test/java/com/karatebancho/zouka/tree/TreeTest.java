@@ -110,6 +110,18 @@ public class TreeTest {
 	}
 
 	@Test
+	public void remove() {
+		TrieTree<String> root = new TrieTree<>();
+		root.put("toukyou", "東京");
+		root.put("saitama", "埼玉");
+		root.put("toukou", "投稿");
+		root.remove("toukyou", "東京");
+		assertThat(root.size(), is(2));
+		root.remove("toukyou", "東京");
+		assertThat(root.size(), is(2));
+	}
+
+	@Test
 	public void getCommonPrefix() {
 		TrieTree<String> root = new TrieTree<>();
 		assertThat(root.getCommonPrefix("abc", "def"), is(""));

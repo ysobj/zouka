@@ -190,14 +190,15 @@ public class TrieTree<V> {
 	}
 
 	public boolean remove(String key, V value) {
-		this.count--;
 		if (key == null) {
 			return false;
 		}
 		TrieTree<V> node = this.getNode(key);
 		if (node != null) {
-			node.removeData(value);
-			return true;
+			if (node.removeData(value)) {
+				this.count--;
+				return true;
+			}
 		}
 		return false;
 	}

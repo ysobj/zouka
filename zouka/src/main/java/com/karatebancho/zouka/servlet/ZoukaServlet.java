@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.karatebancho.zouka.serlet;
+package com.karatebancho.zouka.servlet;
 
 import java.io.BufferedReader;
 import java.io.IOException;

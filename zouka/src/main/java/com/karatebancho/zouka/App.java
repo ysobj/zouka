@@ -6,7 +6,7 @@ import org.apache.catalina.Wrapper;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 
-import com.karatebancho.zouka.serlet.ZoukaServlet;
+import com.karatebancho.zouka.servlet.ZoukaServlet;
 
 /**
  * Hello world!

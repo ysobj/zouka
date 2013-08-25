@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class TrieTree<V> {
+public class TrieTree<V extends Comparable<? super V>> {
 	protected List<V> list = new ArrayList<>();
 	protected List<TrieTree<V>> children = new LinkedList<>();
 	protected String prefix;
@@ -134,6 +134,13 @@ public class TrieTree<V> {
 	}
 
 	protected void putData(V value) {
+		for (int i = 0; i < this.list.size(); i++) {
+			V tmp = this.list.get(i);
+			if (tmp.compareTo(value) > 0) {
+				this.list.add(i, value);
+				return;
+			}
+		}
 		this.list.add(value);
 	}
 
@@ -167,6 +174,13 @@ public class TrieTree<V> {
 		// 新規ノードを作ってその下に。
 		TrieTree<V> tree = new TrieTree<>(subKey);
 		tree.put(subKey, value);
+		for (int i = 0; i < children.size(); i++) {
+			TrieTree<V> child = children.get(i);
+			if (child.prefix.compareTo(subKey) > 0) {
+				children.add(i, tree);
+				return true;
+			}
+		}
 		children.add(tree);
 		return true;
 	}

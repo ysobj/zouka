@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import com.karatebancho.zouka.impl.RomanFilter;
-import com.karatebancho.zouka.tree.TrieTree;
+import com.karatebancho.zouka.tree.PatriciaTree;
 
 public class Sample {
 
@@ -21,7 +21,7 @@ public class Sample {
 		InputStream is = this.getClass().getResourceAsStream("/data.txt");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String str;
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		int i = 0;
 		while ((str = reader.readLine()) != null) {
 			StringTokenizer tokenizer = new StringTokenizer(str);

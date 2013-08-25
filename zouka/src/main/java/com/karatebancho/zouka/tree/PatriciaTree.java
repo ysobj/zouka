@@ -6,23 +6,23 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class TrieTree<V extends Comparable<? super V>> {
+public class PatriciaTree<V extends Comparable<? super V>> {
 	protected List<V> list = new ArrayList<>();
-	protected List<TrieTree<V>> children = new LinkedList<>();
+	protected List<PatriciaTree<V>> children = new LinkedList<>();
 	protected String prefix;
 	protected int count;
 
-	public TrieTree() {
+	public PatriciaTree() {
 		this("");
 	}
 
-	protected TrieTree(String prefix, List<V> data, List<TrieTree<V>> children) {
+	protected PatriciaTree(String prefix, List<V> data, List<PatriciaTree<V>> children) {
 		this.prefix = prefix;
 		this.list = data;
 		this.children = children;
 	}
 
-	protected TrieTree(String prefix) {
+	protected PatriciaTree(String prefix) {
 		this.prefix = prefix;
 	}
 
@@ -34,7 +34,7 @@ public class TrieTree<V extends Comparable<? super V>> {
 		if (key == null) {
 			return null;
 		}
-		TrieTree<V> node = getNode(key);
+		PatriciaTree<V> node = getNode(key);
 		if (node != null) {
 			return node.list;
 		}
@@ -81,7 +81,7 @@ public class TrieTree<V extends Comparable<? super V>> {
 		return subKey;
 	}
 
-	protected TrieTree<V> getNode(Object key) {
+	protected PatriciaTree<V> getNode(Object key) {
 		if (key == null) {
 			return null;
 		}
@@ -93,7 +93,7 @@ public class TrieTree<V extends Comparable<? super V>> {
 		if (StringUtils.isEmpty(subKey)) {
 			return null;
 		}
-		for (TrieTree<V> target : this.children) {
+		for (PatriciaTree<V> target : this.children) {
 			if (target.isResponsible(subKey)) {
 				return target.getNode(subKey);
 			}
@@ -126,7 +126,7 @@ public class TrieTree<V extends Comparable<? super V>> {
 	protected void splitNode(String key) {
 		int commonPrefixSize = getCommonPrefix(key, prefix).length();
 		String subKey = prefix.substring(commonPrefixSize);
-		TrieTree<V> newNode = new TrieTree<>(subKey, this.list, this.children);
+		PatriciaTree<V> newNode = new PatriciaTree<>(subKey, this.list, this.children);
 		this.prefix = key;
 		this.list = new ArrayList<>();
 		this.children = new ArrayList<>();
@@ -164,7 +164,7 @@ public class TrieTree<V extends Comparable<? super V>> {
 		String subKey = this.getSubKey(key);
 		// 子供で部分一致するものがあるか
 		for (int i = 0; i < children.size(); i++) {
-			TrieTree<V> child = children.get(i);
+			PatriciaTree<V> child = children.get(i);
 			// 一致した/それで始まっているならそのノード
 			if (child.isResponsible(subKey)) {
 				child.put(subKey, value);
@@ -172,10 +172,10 @@ public class TrieTree<V extends Comparable<? super V>> {
 			}
 		}
 		// 新規ノードを作ってその下に。
-		TrieTree<V> tree = new TrieTree<>(subKey);
+		PatriciaTree<V> tree = new PatriciaTree<>(subKey);
 		tree.put(subKey, value);
 		for (int i = 0; i < children.size(); i++) {
-			TrieTree<V> child = children.get(i);
+			PatriciaTree<V> child = children.get(i);
 			if (child.prefix.compareTo(subKey) > 0) {
 				children.add(i, tree);
 				return true;
@@ -207,7 +207,7 @@ public class TrieTree<V extends Comparable<? super V>> {
 		if (key == null) {
 			return false;
 		}
-		TrieTree<V> node = this.getNode(key);
+		PatriciaTree<V> node = this.getNode(key);
 		if (node != null) {
 			if (node.removeData(value)) {
 				this.count--;
@@ -227,7 +227,7 @@ public class TrieTree<V extends Comparable<? super V>> {
 		if (StringUtils.isEmpty(key)) {
 			list.addAll(this.list);
 		}
-		for (TrieTree<V> child : this.children) {
+		for (PatriciaTree<V> child : this.children) {
 			if (StringUtils.isEmpty(key)) {
 				child.findValues(key, list);
 			}

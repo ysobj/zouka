@@ -11,7 +11,7 @@ public class TreeTest {
 
 	@Test
 	public void test() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		// 文字列を追加できる
 		root.put("toukyou", "東京");
 		// 文字列の数を確認できる
@@ -36,7 +36,7 @@ public class TreeTest {
 
 	@Test
 	public void 同一のキーワードに複数のデータ() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		root.put("toushi", "投資");
 		root.put("toushi", "透視");
 		root.put("toushi", "凍死");
@@ -50,7 +50,7 @@ public class TreeTest {
 
 	@Test
 	public void キーの分割がない場合の削除() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		root.put("toushi", "投資");
 		root.put("naha", "那覇");
 		assertThat(root.size(), is(2));
@@ -62,7 +62,7 @@ public class TreeTest {
 
 	@Test
 	public void キーの分割が発生する場合の削除() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		root.put("toukyou", "東京");
 		root.put("saitama", "埼玉");
 		root.put("toukou", "投稿");
@@ -78,7 +78,7 @@ public class TreeTest {
 
 	@Test
 	public void findAllValues() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		root.put("toukyou", "東京");
 		root.put("saitama", "埼玉");
 		root.put("toukou", "投稿");
@@ -89,7 +89,7 @@ public class TreeTest {
 
 	@Test
 	public void findAllValues2() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		root.put("toukyou", "東京");
 		root.put("saitama", "埼玉");
 		root.put("toukou", "投稿");
@@ -100,7 +100,7 @@ public class TreeTest {
 
 	@Test
 	public void findAllValues3() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		root.put("toukyou", "東京");
 		root.put("saitama", "埼玉");
 		root.put("toukou", "投稿");
@@ -111,7 +111,7 @@ public class TreeTest {
 
 	@Test
 	public void remove() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		root.put("toukyou", "東京");
 		root.put("saitama", "埼玉");
 		root.put("toukou", "投稿");
@@ -123,7 +123,7 @@ public class TreeTest {
 
 	@Test
 	public void getCommonPrefix() {
-		TrieTree<String> root = new TrieTree<>();
+		PatriciaTree<String> root = new PatriciaTree<>();
 		assertThat(root.getCommonPrefix("abc", "def"), is(""));
 		assertThat(root.getCommonPrefix("abc", "abd"), is("ab"));
 	}

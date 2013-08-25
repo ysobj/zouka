@@ -20,14 +20,14 @@ import com.karatebancho.zouka.impl.HiraKataFilter;
 import com.karatebancho.zouka.impl.MorphologicalFilter;
 import com.karatebancho.zouka.impl.MultiFilter;
 import com.karatebancho.zouka.impl.RomanFilter;
-import com.karatebancho.zouka.tree.TrieTree;
+import com.karatebancho.zouka.tree.PatriciaTree;
 
 /**
  * @author ayataro
  * 
  */
 public class ZoukaServlet extends HttpServlet {
-	protected static TrieTree<String> root;
+	protected static PatriciaTree<String> root;
 	private static final long serialVersionUID = 1L;
 	protected static Filter keywordFilter;
 
@@ -38,7 +38,7 @@ public class ZoukaServlet extends HttpServlet {
 		InputStream is = this.getClass().getResourceAsStream("/data.txt");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 		String str;
-		root = new TrieTree<>();
+		root = new PatriciaTree<>();
 		try {
 			while ((str = reader.readLine()) != null) {
 				StringTokenizer tokenizer = new StringTokenizer(str);

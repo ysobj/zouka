@@ -9,7 +9,7 @@ public class HiraKataFilter implements Filter {
 
 	@Override
 	public String filter(String original) {
-		StringBuffer sb = new StringBuffer(original);
+		StringBuilder sb = new StringBuilder(original);
 		for (int i = 0; i < sb.length(); i++) {
 			char c = sb.charAt(i);
 			if (c >= HIRAGANA_FROM && c <= HIRAGANA_TO) {

@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -30,6 +31,8 @@ public class ZoukaServlet extends HttpServlet {
 	protected static PatriciaTree<String> root;
 	private static final long serialVersionUID = 1L;
 	protected static Filter keywordFilter;
+	private static final char HIRAGANA_FROM = 12353;
+	private static final char KATAKANA_TO = 12524;
 
 	@Override
 	public void init() throws ServletException {
@@ -78,6 +81,7 @@ public class ZoukaServlet extends HttpServlet {
 		System.out.println(originalKey + " " + key);
 		long start = System.currentTimeMillis();
 		List<String> candidates = root.findValues(key);
+		candidates = startWith(candidates, getCjkPrefix(originalKey));
 		long end = System.currentTimeMillis();
 		resp.addHeader("content-type", "application/json;charset=utf-8");
 		resp.getWriter().print("{");
@@ -94,5 +98,28 @@ public class ZoukaServlet extends HttpServlet {
 		}
 		resp.getWriter().print("]");
 		resp.getWriter().print("}");
+	}
+
+	protected List<String> startWith(List<String> base, String prefix) {
+		List<String> filtered = new ArrayList<>();
+		for (String target : base) {
+			if (target.startsWith(prefix)) {
+				filtered.add(target);
+			}
+		}
+		return filtered;
+	}
+
+	protected String getCjkPrefix(String str) {
+		StringBuilder sb = new StringBuilder(str.length());
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (c > KATAKANA_TO) {
+				sb.append(c);
+			} else {
+				break;
+			}
+		}
+		return sb.toString();
 	}
 }

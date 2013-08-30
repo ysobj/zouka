@@ -11,7 +11,6 @@ require(["dojo/dom","dojo/on","dojo/request","dojo/dom-construct","dojo/_base/ar
 	var len = dom.byId("len");
 	var elapse = dom.byId("elapse");
 	var disp = dom.byId("disp");
-	console.log(txt);
 	on(txt,"keyup",function(){
 	
 		request("./zouka",{
@@ -20,17 +19,15 @@ require(["dojo/dom","dojo/on","dojo/request","dojo/dom-construct","dojo/_base/ar
 		}).then(function(data){
 			var candidate = data.candidate;
 			len.innerHTML = candidate.length;
-			elapse.innerHTML = data.elapse;
+			elapse.innerHTML = data.elapse.toString();
 			var content = "<ol>";
 			if(candidate.length  < 500){
 			array.forEach(candidate,function(item){
-				content += "<li>" + item + "</li>";
+				content += "<li>" + item.toString() + "</li>";
 			});
 			}
 			content += "</ol>";
-			console.log("???" ,content);
 			domConstruct.place(content, "disp", "only");
-			console.log(candidate);
 		});
 	});
 });

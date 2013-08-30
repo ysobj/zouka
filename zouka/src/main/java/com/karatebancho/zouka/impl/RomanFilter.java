@@ -118,8 +118,8 @@ public class RomanFilter implements Filter {
 		if (StringUtils.isEmpty(part)) {
 			return part;
 		}
-		if (StringUtils.endsWithAny(part, "zy", "my", "ny", "sy", "ry", "ty",
-				"py", "dy", "gy", "hy", "jy", "ky", "vy", "by")) {
+		if (StringUtils.endsWithAny(part, "zy", "my", "ny", "sy", "sh", "ry",
+				"ty", "py", "dy", "gy", "hy", "jy", "ky", "vy", "by")) {
 			return part.substring(0, part.length() - 1);
 		}
 		if (StringUtils.endsWithAny(part, "ch", "cy")) {
